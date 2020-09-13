@@ -1,6 +1,6 @@
 # AGAMA: A (very) Generic App to Manage Anything
 
-Simple (and mostly pointless) list management app on Python, Flask and
+Simple (and mostly pointless) list management app in Python, Flask and
 SQLAlchemy.
 
 ![Screenshot](./agama-screenshot.png)
@@ -38,7 +38,8 @@ Alternative way is to use `pip` -- but deploying to Python Virtualenv is
 
 Note: do not use both `pip` and `apt`! Choose _one_ method only.
 
-Download the `agama.py` to the desired location.
+Download the [agama.py](https://raw.githubusercontent.com/hudolejev/agama/master/agama.py)
+to the desired location.
 
 That's it -- you're ready to go.
 
@@ -105,7 +106,7 @@ Example Nginx proxy configuration:
 
 ## Contributing
 
-Issue reports and pull requests are warmly welcome.
+[Issue reports](./issues) and [pull requests](./pulls) are warmly welcome.
 
 
 ## Author

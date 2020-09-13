@@ -1,8 +1,3 @@
-# Requires Python 3.3+
-# Dependencies:
-#  - if installing with pip: Flask-SQLAlchemy
-#  - if installing with apt: python3-flask-sqlalchemy
-
 import os
 import sys
 
