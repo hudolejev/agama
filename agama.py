@@ -41,7 +41,7 @@ class Item(db.Model):
 
 @app.before_request
 def before_request():
-    if not Item.metadata.tables[Item.__tablename__].exists(db.get_engine()):
+    if not Item.metadata.tables[Item.__tablename__].exists(db.get_engine(app)):
         app.logger.info('Initializing the database...')
         init_db()
 
