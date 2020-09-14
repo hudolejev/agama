@@ -106,7 +106,8 @@ Example Nginx proxy configuration:
 
 ## Contributing
 
-[Issue reports](./issues) and [pull requests](./pulls) are warmly welcome.
+[Issue reports](https://github.com/hudolejev/agama/issues) and
+[pull requests](https://github.com/hudolejev/agama/pulls) are warmly welcome.
 
 
 ## Author
