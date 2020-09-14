@@ -23,11 +23,19 @@ find some better ones.
  - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
    (known to work on v2.4.4)
 
+Optional for closer-to-production setups:
+
+ - MySQL or any other database that
+   [SQLAlchemy supports](https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases)
+ - uWSGI or any other app server that
+   [can run Flask apps](https://flask.palletsprojects.com/en/1.1.x/deploying)
+ - Nginx or any other web server that can 'talk' to your app server of choice
+
 
 ## Installation
 
-Install dependencies; recommended way is to use system package manager, example
-for Debian/Ubuntu:
+Install dependencies; recommended way is to use OS package manager, example for
+Debian/Ubuntu:
 
 	apt install python3-flask-sqlalchemy
 
@@ -49,57 +57,41 @@ That's it -- you're ready to go.
 AGAMA is configured with environment variables. Currently the only supported
 parameter is `AGAMA_DATABASE_URI` which uses the same format as
 [SQLAlchemy database URLs](https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls),
-example:
+example for SQLite:
 
 	AGAMA_DATABASE_URI=sqlite:////path/to/db.sqlite3
-
-AGAMA should support all database backends that
-[SQLAlchemy supports](https://docs.sqlalchemy.org/en/13/dialects/index.html#included-dialects)
-but it was tested only with SQLite and MySQL.
-
-If in doubt, use SQLite -- it's just a demo app after all :)
 
 
 ## Running
 
-Running manually, mostly for development purposes (example for SQLite):
+Running manually -- only for development and/or testing purposes, example with
+SQLite:
 
-	AGAMA_DATABASE_URI=sqlite:////path/to/db.sqlite3 /path/to/python3 /path/to/agama.py
+	export AGAMA_DATABASE_URI=sqlite:////path/to/db.sqlite3
+	/path/to/python3 /path/to/agama.py
 
-Running with Systemd (example for MySQL; database, database user and local
-system user `agama` should be created first):
+Running with [uWSGI](https://uwsgi-docs.readthedocs.io) -- example with MySQL;
+database, database user and local system user `agama` should be created first:
 
-	# File: /etc/systemd/system/agama.service
-	[Unit]
-	Description=AGAMA: A (very) Generic App to Manage Anything
+	[uwsgi]
+	chdir = /path/to/agama/dir
+	module = agama:app
+	env = AGAMA_DATABASE_URI=mysql://<username>:<password>@<db-host>/<db-name>
+	socket = localhost:5000
+	uid = agama
 
-	[Service]
-	User=agama
-	Environment="AGAMA_DATABASE_URI=mysql://<username>:<password>@<db-host>/<db-name>"
-	ExecStart=/path/to/python3 /path/to/agama.py
-
-	[Install]
-	WantedBy=multi-user.target
-
-	# Terminal:
-	systemctl daemon-reload
-	systemctl start agama
-
-
-You can also run it manually with MySQL backend, or with Systemd and SQLite
+You can also run it manually with MySQL backend, or with uWSGI and SQLite
 backend if you want.
 
-Once started, AGAMA binds to localhost:5000.
-
-Example Nginx proxy configuration:
+Example Nginx configuration for uWSGI setup:
 
 	server {
 		listen 80 default_server;
 		server_name _;
 
 		location / {
-			proxy_pass http://localhost:5000;
-			proxy_set_header Host $http_host;
+			uwsgi_pass localhost:5000;
+			include uwsgi_params;
 		}
 	}
 
