@@ -112,7 +112,9 @@ Example Nginx proxy configuration:
 
 ## Author
 
-Juri Hudolejev
+[Juri Hudolejev](https://github.com/hudolejev).
+
+Special thanks to [Roman Kuchin](https://github.com/romankuchin) for testing.
 
 
 ## License

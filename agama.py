@@ -53,9 +53,24 @@ def index():
 
 @app.route('/items/add', methods=['GET', 'POST'])
 def item_add():
+    item = request.form['new_item']
+    if len(item) > 999:
+        return """
+            <p>The item you are trying to add seems too large.</p>
+            <p>Do you <i>really</i> need to store a 1000 character essay here?</p>
+            <p>If so, please consider using <a href="https://www.office.com/">Office 365</a> instead.</p>
+            <p><a href="/">Go back</a>.</p>"""
+
+    if Item.query.count() >= 100:
+        return """
+            <p>You are trying to add too many items.</p>
+            <p>Do you <i>really</i> need more than 100 items?</p>
+            <p>If so, please consider using <a href="https://www.office.com/">Office 365</a> instead.</p>
+            <p><a href="/">Go back</a>.</p>"""
+
     if request.method == 'POST':
-        app.logger.info("Adding item '%s'..." % request.form['new_item'])
-        db.session.add(Item(value=request.form['new_item']))
+        app.logger.info("Adding item '%s'..." % item)
+        db.session.add(Item(value=item))
         db.session.commit()
 
     return redirect(url_for('index'))
