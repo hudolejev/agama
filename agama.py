@@ -35,7 +35,7 @@ db = SQLAlchemy(app)
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    value = db.Column(db.String, unique=True, nullable=False)
+    value = db.Column(db.String(999), unique=True, nullable=False)
     state = db.Column(db.Integer, default=0)
 
 
@@ -55,18 +55,14 @@ def index():
 def item_add():
     item = request.form['new_item']
     if len(item) > 999:
-        return """
-            <p>The item you are trying to add seems too large.</p>
-            <p>Do you <i>really</i> need to store a 1000 character essay here?</p>
-            <p>If so, please consider using <a href="https://www.office.com/">Office 365</a> instead.</p>
-            <p><a href="/">Go back</a>.</p>"""
+        return html_error('The item you are trying to add seems too large; it should be shorter than 1000 characters.')
 
     if Item.query.count() >= 100:
-        return """
-            <p>You are trying to add too many items.</p>
-            <p>Do you <i>really</i> need more than 100 items?</p>
-            <p>If so, please consider using <a href="https://www.office.com/">Office 365</a> instead.</p>
-            <p><a href="/">Go back</a>.</p>"""
+        return html_error('You are trying to add too many items; you have 100 items added already.')
+
+    existing_item = Item.query.filter_by(value=item).first()
+    if existing_item:
+        return html_error('Item [%s] already exists.' % item)
 
     if request.method == 'POST':
         app.logger.info("Adding item '%s'..." % item)
@@ -96,6 +92,10 @@ def item_swap_state(id):
         db.session.commit()
 
     return redirect(url_for('index'))
+
+
+def html_error(error_msg):
+    return '<h2>Error</h2><p>%s</p><p><a href="/">Go back</a>.</p>' % error_msg.strip().replace('\n', '</p><p>')
 
 
 def html(items=[]):
