@@ -1,8 +1,8 @@
-FROM alpine:latest
+FROM python:latest
 
-RUN apk add python3 && \
-    python3 -m ensurepip && \
+RUN python3 -m ensurepip && \
     pip3 install Flask-SQLAlchemy && \
+    pip3 install mysqlclient && \
     mkdir /agama && \
     wget -O/agama/agama.py https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
 
