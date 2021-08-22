@@ -34,7 +34,11 @@ try:
     if(database_exists(os.environ['AGAMA_DATABASE_URI'])):
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_URI']
 except:
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_BACKUP_URI']
+    if 'AGAMA_DATABASE_BACKUP_URI' in os.environ:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_BACKUP_URI']
+    else:
+        print('ERROR: Primary Database URI does not work, secondary db URI AGAMA_DATABASE_BACKUP_URI is not set.')
+        sys.exit(1)
 db = SQLAlchemy(app)
 
 
