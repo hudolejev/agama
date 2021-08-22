@@ -3,6 +3,7 @@ FROM python:latest
 RUN python3 -m ensurepip && \
     pip3 install Flask-SQLAlchemy && \
     pip3 install mysqlclient && \
+    pip3 install sqlalchemy-utils && \
     mkdir /agama && \
     wget -O/agama/agama.py https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
 

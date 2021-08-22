@@ -7,6 +7,7 @@ from flask import request
 from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 from jinja2 import Environment
+from sqlalchemy_utils import database_exists
 
 
 if 'AGAMA_DATABASE_URI' not in os.environ:
@@ -28,8 +29,12 @@ https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls.''')
     sys.exit(1)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_URI']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+try:
+    if(database_exists(os.environ['AGAMA_DATABASE_URI'])):
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_URI']
+except:
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['AGAMA_DATABASE_BACKUP_URI']
 db = SQLAlchemy(app)
 
 
