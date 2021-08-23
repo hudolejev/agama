@@ -1,6 +1,7 @@
-FROM python:latest
+FROM alpine:latest
 
-RUN python3 -m ensurepip && \
+RUN apk add python3 python3-dev mariadb-dev gcc musl-dev && \
+    python3 -m ensurepip && \
     pip3 install Flask-SQLAlchemy && \
     pip3 install mysqlclient && \
     mkdir /agama && \
