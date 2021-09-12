@@ -165,7 +165,7 @@ def html(items=[]):
         </table>
         <p>Hint: Click on item to change its state, or X to delete.</p>
         <p class="footer">
-            AGAMA v0.1.1 running on {{ host }} |
+            AGAMA v0.1 running on {{ host }} |
             <a href="https://github.com/hudolejev/agama">GitHub</a>
         </p>
     <body>
