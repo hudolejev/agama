@@ -17,11 +17,11 @@ find some better ones.
 
 ## Requirements
 
- - Python 3 (known to work on v3.6.9)
+ - Python 3 (known to work on v3.8.10, v3.6.9)
  - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-   (known to work on v1.1.2)
+   (known to work on v1.1.2, v1.1.1)
  - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
-   (known to work on v2.4.4)
+   (known to work on v2.4.4, v2.1)
 
 Optional for closer-to-production setups:
 
@@ -77,6 +77,7 @@ database, database user and local system user `agama` should be created first:
 	chdir = /path/to/agama/dir
 	module = agama:app
 	env = AGAMA_DATABASE_URI=mysql://<username>:<password>@<db-host>/<db-name>
+	plugins = python3
 	socket = localhost:5000
 	uid = agama
 
@@ -104,9 +105,11 @@ Example Nginx configuration for uWSGI setup:
 
 ## Author
 
-[Juri Hudolejev](https://github.com/hudolejev).
+[Juri Hudolejev](https://github.com/hudolejev) -- initial design and implementation.
 
-Special thanks to [Roman Kuchin](https://github.com/romankuchin) for testing.
+Special thanks to
+ - [Roman Kuchin](https://github.com/romankuchin) for testing
+ - [Margus Laanem](https://github.com/marguslaanem) for Docker file improvements
 
 
 ## License
