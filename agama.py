@@ -35,7 +35,7 @@ db = SQLAlchemy(app)
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    value = db.Column(db.String(999), unique=True, nullable=False)
+    value = db.Column(db.String(255), unique=True, nullable=False)
     state = db.Column(db.Integer, default=0)
 
 
@@ -54,8 +54,8 @@ def index():
 @app.route('/items/add', methods=['GET', 'POST'])
 def item_add():
     item = request.form['new_item']
-    if len(item) > 999:
-        return html_error('The item you are trying to add seems too large; it should be shorter than 1000 characters.')
+    if len(item) > 255:
+        return html_error('The item you are trying to add seems too large; it should be shorter than 256 characters.')
 
     if Item.query.count() >= 100:
         return html_error('You are trying to add too many items; you have 100 items added already.')
