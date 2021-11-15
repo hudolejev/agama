@@ -1,9 +1,8 @@
-FROM alpine:latest
+FROM ubuntu:focal
 
-RUN apk add python3 python3-dev mariadb-dev gcc musl-dev && \
-    python3 -m ensurepip && \
-    pip3 install Flask-SQLAlchemy && \
-    pip3 install mysqlclient && \
+RUN apt-get update && \
+    apt-get --yes install python3-flask-sqlalchemy python3-pymysql wget && \
+    apt-get clean && \
     mkdir /agama && \
     wget -O/agama/agama.py https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
 
