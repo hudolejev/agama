@@ -4,7 +4,7 @@ RUN apt-get update && \
     apt-get --yes install python3-flask-sqlalchemy python3-pymysql wget && \
     apt-get clean && \
     mkdir /agama && \
-    wget -O/agama/agama.py https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
+    wget --secure-protocol=TLSv1_2 -O/agama/agama.py https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
 
 ENV AGAMA_DATABASE_URI=sqlite:////agama/db.sqlite3
 ENV FLASK_APP=agama
