@@ -1,3 +1,4 @@
+import html
 import os
 import sys
 
@@ -48,7 +49,7 @@ def before_request():
 
 @app.route('/')
 def index():
-    return html(items=Item.query.all())
+    return html_render(items=Item.query.all())
 
 
 @app.route('/items/add', methods=['GET', 'POST'])
@@ -95,10 +96,10 @@ def item_swap_state(id):
 
 
 def html_error(error_msg):
-    return '<h2>Error</h2><p>%s</p><p><a href="/">Go back</a>.</p>' % error_msg.strip().replace('\n', '</p><p>')
+    return '<h2>Error</h2><p>%s</p><p><a href="/">Go back</a>.</p>' % html.escape(error_msg.strip()).replace('\n', '</p><p>')
 
 
-def html(items=[]):
+def html_render(items=[]):
     return Environment(autoescape=True).from_string("""<!DOCTYPE html>
 <html>
     <head>
