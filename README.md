@@ -17,18 +17,18 @@ find some better ones.
 
 ## Requirements
 
- - Python 3 (known to work on v3.8.10, v3.6.9)
- - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-   (known to work on v1.1.2, v1.1.1)
- - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
-   (known to work on v2.4.4, v2.1)
+ - Python 3 (known to work on v3.12.3)
+ - [Flask](https://flask.palletsprojects.com/en/stable/)
+   (known to work on v3.0.2)
+ - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/stable/)
+   (known to work on v3.0.3)
 
 Optional for closer-to-production setups:
 
  - MySQL or any other database that
-   [SQLAlchemy supports](https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases)
+   [SQLAlchemy supports](https://docs.sqlalchemy.org/en/14/core/engines.html#supported-databases)
  - uWSGI or any other app server that
-   [can run Flask apps](https://flask.palletsprojects.com/en/1.1.x/deploying)
+   [can run Flask apps](https://flask.palletsprojects.com/en/stable/deploying)
  - Nginx or any other web server that can 'talk' to your app server of choice
 
 
@@ -46,7 +46,7 @@ Alternative way is to use `pip` -- but deploying to Python Virtualenv is
 
 Note: do not use both `pip` and `apt`! Choose _one_ method only.
 
-Download the [agama.py](https://raw.githubusercontent.com/hudolejev/agama/master/agama.py)
+Download the [agama.py](https://raw.githubusercontent.com/hudolejev/agama/main/agama.py)
 to the desired location.
 
 That's it -- you're ready to go.
@@ -56,7 +56,7 @@ That's it -- you're ready to go.
 
 AGAMA is configured with environment variables. Currently the only supported
 parameter is `AGAMA_DATABASE_URI` which uses the same format as
-[SQLAlchemy database URLs](https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls),
+[SQLAlchemy database URLs](https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls),
 example for SQLite:
 
 	AGAMA_DATABASE_URI=sqlite:////path/to/db.sqlite3

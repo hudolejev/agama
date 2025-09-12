@@ -40,13 +40,6 @@ class Item(db.Model):
     state = db.Column(db.Integer, default=0)
 
 
-@app.before_request
-def before_request():
-    if not Item.metadata.tables[Item.__tablename__].exists(db.get_engine(app)):
-        app.logger.info('Initializing the database...')
-        init_db()
-
-
 @app.route('/')
 def index():
     return html_render(items=Item.query.all())
@@ -96,7 +89,8 @@ def item_swap_state(id):
 
 
 def html_error(error_msg):
-    return '<h2>Error</h2><p>%s</p><p><a href="/">Go back</a>.</p>' % html.escape(error_msg.strip()).replace('\n', '</p><p>')
+    error_msg_html = '<p>%s</p>' % html.escape(error_msg.strip()).replace('\n', '</p><p>')
+    return '<h2>Error</h2><p>%s</p><p><a href="/">Go back</a>.</p>' % error_msg_html
 
 
 def html_render(items=[]):
@@ -166,7 +160,7 @@ def html_render(items=[]):
         </table>
         <p>Hint: Click on item to change its state, or X to delete.</p>
         <p class="footer">
-            AGAMA v0.1 running on {{ host }} |
+            AGAMA v0.2 running on {{ host }} |
             <a href="https://github.com/hudolejev/agama">GitHub</a>
         </p>
     <body>
@@ -179,6 +173,11 @@ def init_db():
     db.session.add(Item(value='Another even less meaningful item'))
     db.session.commit()
 
+
+with app.app_context():
+    if not db.get_engine().has_table(Item.__tablename__):
+        app.logger.info('Initializing the database...')
+        init_db()
 
 if __name__ == '__main__':
     app.run()
