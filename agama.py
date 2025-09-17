@@ -8,6 +8,7 @@ from flask import request
 from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 from jinja2 import Environment
+from sqlalchemy import inspect
 
 
 if 'AGAMA_DATABASE_URI' not in os.environ:
@@ -175,7 +176,7 @@ def init_db():
 
 
 with app.app_context():
-    if not db.get_engine().has_table(Item.__tablename__):
+    if not inspect(db.engine).has_table(Item.__tablename__):
         app.logger.info('Initializing the database...')
         init_db()
 
