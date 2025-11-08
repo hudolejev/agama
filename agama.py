@@ -41,6 +41,18 @@ class Item(db.Model):
     state = db.Column(db.Integer, default=0)
 
 
+@app.before_request
+def before_request():
+    try:
+        with db.engine.connect() as conn:
+            if not inspect(conn).has_table(Item.__tablename__):
+                init_db()
+    except Exception:
+        db.session.remove()
+        db.engine.dispose()
+        init_db()
+
+
 @app.route('/')
 def index():
     return html_render(items=Item.query.all())
@@ -98,6 +110,7 @@ def html_render(items=[]):
     return Environment(autoescape=True).from_string("""<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="refresh" content="30">
         <title>AGAMA</title>
         <style>
             a.delete { text-decoration: none; }
@@ -155,30 +168,24 @@ def html_render(items=[]):
 {% for item in items %}
             <tr class="item-{{ item['state'] }}">
                 <td class="item"><a href="/items/{{ item['id'] }}/swap-state">{{ item['value'] }}</a></td>
-                <td class="actions"><a class="delete" href="/items/{{ item['id'] }}/delete">❌</a</td>
+                <td class="actions"><a class="delete" href="/items/{{ item['id'] }}/delete">❌</a></td>
             </tr>
 {% endfor %}
         </table>
-        <p>Hint: Click on item to change its state, or X to delete.</p>
         <p class="footer">
-            AGAMA v0.2 running on {{ host }} |
-            <a href="https://github.com/hudolejev/agama">GitHub</a>
+            <a href="https://github.com/hudolejev/agama">AGAMA</a> v0.3 running on {{ host }}
         </p>
     <body>
 </html>""").render(host=os.uname()[1], items=items)
 
 
 def init_db():
+    app.logger.info('Initializing the database...')
     db.create_all()
-    db.session.add(Item(value='A pre-created item with no particular meaning', state=1))
-    db.session.add(Item(value='Another even less meaningful item'))
+    db.session.add(Item(value="I'm a demo item — click me to change my state", state=1))
+    db.session.add(Item(value="I'm another demo item — click ❌ to remove me →"))
     db.session.commit()
 
-
-with app.app_context():
-    if not inspect(db.engine).has_table(Item.__tablename__):
-        app.logger.info('Initializing the database...')
-        init_db()
 
 if __name__ == '__main__':
     app.run()
