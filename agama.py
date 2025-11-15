@@ -44,9 +44,7 @@ class Item(db.Model):
 @app.before_request
 def before_request():
     try:
-        with db.engine.connect() as conn:
-            if not inspect(conn).has_table(Item.__tablename__):
-                init_db()
+        init_db()
     except Exception:
         db.session.remove()
         db.engine.dispose()
@@ -180,11 +178,13 @@ def html_render(items=[]):
 
 
 def init_db():
-    app.logger.info('Initializing the database...')
-    db.create_all()
-    db.session.add(Item(value="I'm a demo item — click me to change my state", state=1))
-    db.session.add(Item(value="I'm another demo item — click ❌ to remove me →"))
-    db.session.commit()
+    with db.engine.connect() as conn:
+        if not inspect(conn).has_table(Item.__tablename__):
+            app.logger.info('Initializing the database...')
+            db.create_all()
+            db.session.add(Item(value="I'm a demo item — click me to change my state", state=1))
+            db.session.add(Item(value="I'm another demo item — click ❌ to remove me →"))
+            db.session.commit()
 
 
 if __name__ == '__main__':

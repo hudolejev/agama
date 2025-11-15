@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 
 RUN apt-get update && \
     apt-get --yes install python3-flask-sqlalchemy python3-pymysql && \
